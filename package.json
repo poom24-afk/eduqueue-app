@@ -1,0 +1,16 @@
+{
+  "name": "eduqueue-app",
+  "version": "1.0.0",
+  "description": "ระบบเรียกคิวสำหรับผู้ใช้งานและคุณครู (Queue Calling Application)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/api.test.js"
+  },
+  "keywords": ["queue", "education", "teacher", "student"],
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

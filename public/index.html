@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduQueue — ระบบเรียกคิวออนไลน์</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" id="brand-home">
+        <div class="brand-icon">Q</div>
+        <div>
+          <div class="brand-title">EduQueue</div>
+          <div class="brand-sub">ระบบเรียกคิวและติดตามลำดับคิว</div>
+        </div>
+      </div>
+
+      <nav class="nav-actions" id="nav-actions"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Auth View (Login / Self-Register) -->
+    <section id="view-auth" class="view hidden">
+      <div class="auth-layout">
+        <div class="auth-intro card">
+          <span class="pill pill-primary">ระบบคิวเรียลไทม์</span>
+          <h1>จองคิวออนไลน์ และติดตามลำดับคิวของคุณได้ทันที</h1>
+          <p class="muted">
+            ลดความแออัดหน้าห้องพักครู รู้ลำดับคิวแบบเรียลไทม์ พร้อมแจ้งเตือนเมื่อถึงคิวของคุณ
+          </p>
+          <ul class="feature-list">
+            <li><strong>ผู้ใช้งาน / นักเรียน:</strong> สมัครสมาชิกด้วยตนเอง จองคิว และดูลำดับคิวแบบสดๆ</li>
+            <li><strong>คุณครู:</strong> จัดการช่องบริการ เรียกคิวถัดไป เรียกซ้ำ ข้ามคิว และสร้างบัญชีคุณครูเพิ่มได้</li>
+            <li><strong>จอแสดงผลคิวรวม:</strong> อัปเดตอัตโนมัติทันทีที่มีการเรียกคิว</li>
+          </ul>
+
+          <div class="demo-box">
+            <div class="demo-title">บัญชีคุณครูสำหรับทดสอบระบบ</div>
+            <div class="demo-accounts">
+              <button type="button" class="btn-chip" data-fill-login="teacher1" data-fill-pass="teacher123">
+                อ.สมชาย (<code>teacher1</code> / <code>teacher123</code>)
+              </button>
+              <button type="button" class="btn-chip" data-fill-login="teacher2" data-fill-pass="teacher123">
+                อ.วิภาวรรณ (<code>teacher2</code> / <code>teacher123</code>)
+              </button>
+            </div>
+            <p class="demo-hint">สำหรับผู้ใช้งานทั่วไป สามารถกดแท็บ "สมัครสมาชิก" เพื่อสร้างบัญชีใหม่ได้ทันที</p>
+          </div>
+        </div>
+
+        <div class="auth-card card">
+          <div class="tabs">
+            <button type="button" class="tab-btn active" data-auth-tab="login">เข้าสู่ระบบ</button>
+            <button type="button" class="tab-btn" data-auth-tab="register">สมัครสมาชิก (ผู้ใช้)</button>
+          </div>
+
+          <form id="form-login" class="form-stack">
+            <div class="form-group">
+              <label for="login-username">ชื่อผู้ใช้ (Username)</label>
+              <input id="login-username" name="username" type="text" required autocomplete="username" placeholder="เช่น somchai หรือ teacher1" />
+            </div>
+            <div class="form-group">
+              <label for="login-password">รหัสผ่าน</label>
+              <input id="login-password" name="password" type="password" required autocomplete="current-password" placeholder="กรอกรหัสผ่าน" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">เข้าสู่ระบบ</button>
+          </form>
+
+          <form id="form-register" class="form-stack hidden">
+            <div class="form-group">
+              <label for="reg-fullname">ชื่อ - นามสกุล <span class="req">*</span></label>
+              <input id="reg-fullname" name="fullName" type="text" required placeholder="เช่น นายกิตติพงศ์ ใจสู้" />
+            </div>
+            <div class="form-group">
+              <label for="reg-student-code">รหัสนักเรียน / รหัสประจำตัว (ถ้ามี)</label>
+              <input id="reg-student-code" name="studentCode" type="text" placeholder="เช่น 66010234" />
+            </div>
+            <div class="form-group">
+              <label for="reg-username">ชื่อผู้ใช้สำหรับเข้าสู่ระบบ <span class="req">*</span></label>
+              <input id="reg-username" name="username" type="text" required minlength="3" pattern="[a-zA-Z0-9._-]{3,32}" placeholder="ภาษาอังกฤษหรือตัวเลข 3-32 ตัวอักษร" />
+            </div>
+            <div class="form-group">
+              <label for="reg-password">รหัสผ่าน <span class="req">*</span></label>
+              <input id="reg-password" name="password" type="password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">สมัครบัญชีผู้ใช้</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Queue View -->
+    <section id="view-user" class="view hidden">
+      <div class="section-header">
+        <div>
+          <h2>หน้าลำดับคิวของคุณ</h2>
+          <p class="muted">ตรวจสอบสถานะคิว ลำดับที่เหลือ และจองคิวเข้าพบคุณครูแบบเรียลไทม์</p>
+        </div>
+        <div class="sound-toggle-wrap">
+          <label class="switch-label">
+            <input type="checkbox" id="user-sound-toggle" checked />
+            <span>เปิดเสียงแจ้งเตือนเมื่อถึงคิว</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- User's Active Tickets & Position -->
+      <div id="user-active-section" class="active-tickets-grid"></div>
+
+      <!-- Book New Queue -->
+      <div class="card section-block">
+        <div class="block-header">
+          <div>
+            <h3>เลือกจุดบริการ / คุณครูเพื่อรับบัตรคิว</h3>
+            <p class="muted">ระบุเรื่องที่ต้องการติดต่อ (ไม่บังคับ) แล้วกด "รับบัตรคิว"</p>
+          </div>
+        </div>
+        <div class="form-group note-bar">
+          <label for="user-booking-note">เรื่องที่ต้องการติดต่อ (ใช้กับคิวที่จะจอง)</label>
+          <input id="user-booking-note" type="text" maxlength="200" placeholder="เช่น ปรึกษาโปรเจกต์จบ, ส่งการบ้านบทที่ 4, ขอใบรับรอง" />
+        </div>
+        <div id="user-desks-grid" class="desks-grid"></div>
+      </div>
+
+      <!-- Live Queue Order Inspector for Selected / All Desks -->
+      <div class="card section-block">
+        <div class="block-header">
+          <div>
+            <h3>ลำดับคิวทั้งหมดในแต่ละจุดบริการ (เรียลไทม์)</h3>
+            <p class="muted">แถบสีฟ้าแสดงตำแหน่งคิวของคุณในแถวรอ</p>
+          </div>
+        </div>
+        <div id="user-queue-orders" class="orders-grid"></div>
+      </div>
+
+      <!-- User Ticket History -->
+      <div class="card section-block">
+        <div class="block-header">
+          <h3>ประวัติการรับคิวล่าสุดของคุณ</h3>
+        </div>
+        <div id="user-history-list"></div>
+      </div>
+    </section>
+
+    <!-- Teacher Console View -->
+    <section id="view-teacher" class="view hidden">
+      <div class="section-header">
+        <div>
+          <h2>แดชบอร์ดจัดการคิว (คุณครู)</h2>
+          <p class="muted">เลือกจุดบริการเพื่อเรียกคิวถัดไป เรียกซ้ำ หรือจัดการลำดับคิว</p>
+        </div>
+        <div class="teacher-subnav">
+          <button type="button" class="btn btn-outline active" data-teacher-tab="console">🎛️ หน้าเรียกคิว</button>
+          <button type="button" class="btn btn-outline" data-teacher-tab="manage">⚙️ ตั้งค่าจุดบริการ &amp; บัญชีคุณครู</button>
+        </div>
+      </div>
+
+      <div id="teacher-tab-console">
+        <div class="desk-selector-bar" id="teacher-desk-tabs"></div>
+
+        <div class="teacher-workspace" id="teacher-workspace">
+          <!-- Left: Calling Controls -->
+          <div class="card teacher-caller-card" id="teacher-caller-card"></div>
+
+          <!-- Right: Waiting Queue List -->
+          <div class="card teacher-waiting-card">
+            <div class="block-header">
+              <div>
+                <h3>รายชื่อผู้รอคิวตามลำดับ</h3>
+                <p class="muted" id="teacher-waiting-subtitle"></p>
+              </div>
+            </div>
+            <div id="teacher-waiting-list"></div>
+          </div>
+        </div>
+
+        <div class="card section-block">
+          <div class="block-header">
+            <h3>ประวัติการเรียกคิวล่าสุด</h3>
+          </div>
+          <div id="teacher-history-table"></div>
+        </div>
+      </div>
+
+      <div id="teacher-tab-manage" class="hidden">
+        <div class="manage-grid">
+          <div class="card">
+            <h3>เพิ่มจุดบริการ / ห้องพักครูใหม่</h3>
+            <p class="muted">สร้างช่องคิวเพิ่มเติมสำหรับรายวิชาหรือคุณครูท่านอื่น</p>
+            <form id="form-create-desk" class="form-stack">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="desk-code">รหัสอักษรนำหน้า (1-3 ตัว) <span class="req">*</span></label>
+                  <input id="desk-code" name="code" type="text" required maxlength="3" placeholder="เช่น D" />
+                </div>
+                <div class="form-group">
+                  <label for="desk-teacher-name">ชื่อคุณครูผู้ดูแล <span class="req">*</span></label>
+                  <input id="desk-teacher-name" name="teacherName" type="text" required placeholder="เช่น อ.มานะ พัฒนา" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="desk-name">ชื่อจุดบริการ <span class="req">*</span></label>
+                <input id="desk-name" name="name" type="text" required placeholder="เช่น ตรวจแล็บวิทยาศาสตร์" />
+              </div>
+              <div class="form-group">
+                <label for="desk-desc">คำอธิบายเพิ่มเติม</label>
+                <input id="desk-desc" name="description" type="text" placeholder="เช่น ห้องปฏิบัติการ 204 ชั้น 2" />
+              </div>
+              <button type="submit" class="btn btn-primary">สร้างจุดบริการ</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h3>สร้างบัญชีคุณครูใหม่</h3>
+            <p class="muted">เพิ่มบัญชีคุณครูเพื่อใช้เข้าสู่ระบบจัดการคิว</p>
+            <form id="form-create-teacher" class="form-stack">
+              <div class="form-group">
+                <label for="new-t-fullname">ชื่อ - นามสกุลคุณครู <span class="req">*</span></label>
+                <input id="new-t-fullname" name="fullName" type="text" required placeholder="เช่น อ.ปวีณา สอนดี" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="new-t-username">ชื่อผู้ใช้ (Username) <span class="req">*</span></label>
+                  <input id="new-t-username" name="username" type="text" required minlength="3" pattern="[a-zA-Z0-9._-]{3,32}" placeholder="เช่น teacher3" />
+                </div>
+                <div class="form-group">
+                  <label for="new-t-code">รหัสประจำตัวครู</label>
+                  <input id="new-t-code" name="teacherCode" type="text" placeholder="เช่น T-003" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="new-t-password">รหัสผ่าน <span class="req">*</span></label>
+                <input id="new-t-password" name="password" type="password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร" />
+              </div>
+              <button type="submit" class="btn btn-primary">เพิ่มบัญชีคุณครู</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card section-block">
+          <h3>รายชื่อบัญชีคุณครูในระบบ</h3>
+          <div id="teacher-accounts-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Display Board View -->
+    <section id="view-display" class="view hidden">
+      <div class="section-header">
+        <div>
+          <h2>จอแสดงผลคิวรวม (Live Board)</h2>
+          <p class="muted">อัปเดตสถานะการเรียกคิวทุกจุดบริการแบบเรียลไทม์</p>
+        </div>
+        <label class="switch-label">
+          <input type="checkbox" id="display-sound-toggle" checked />
+          <span>เปิดเสียงประกาศคิวอัตโนมัติ</span>
+        </label>
+      </div>
+
+      <div id="display-announcement" class="display-announcement hidden"></div>
+      <div id="display-board-grid" class="display-grid"></div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
