@@ -10,6 +10,9 @@
   "keywords": ["queue", "education", "teacher", "student"],
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "dependencies": {
     "express": "^5.1.0"
   }
